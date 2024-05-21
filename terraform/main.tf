@@ -20,6 +20,14 @@ module "subnet_1b" {
   depends_on        = [module.vpc_main]
 }
 
+module "subnet_1c" {
+  source            = "./modules/subnet"
+  vpc_id            = module.vpc_main.vpc_id
+  cidr_block        = "10.0.3.0/24"
+  availability_zone = "sa-east-1c"
+  depends_on        = [module.vpc_main]
+}
+
 module "route_table_main" {
   source = "./modules/route_table"
   vpc_id = module.vpc_main.vpc_id
@@ -27,18 +35,21 @@ module "route_table_main" {
 
   routes = [
     { cidr_block = module.subnet_1a.cidr_block },
-    { cidr_block = module.subnet_1b.cidr_block }
+    { cidr_block = module.subnet_1b.cidr_block },
+    { cidr_block = module.subnet_1c.cidr_block }
   ]
 
   subnet_ids = [
     module.subnet_1a.subnet_id,
-    module.subnet_1b.subnet_id
+    module.subnet_1b.subnet_id,
+    module.subnet_1c.subnet_id
   ]
 
   depends_on = [
     module.vpc_main,
     module.subnet_1a,
     module.subnet_1b,
+    module.subnet_1c,
   ]
 }
 
@@ -58,13 +69,26 @@ module "ec2-1a" {
 module "ec2-1b" {
   source = "./modules/ec2"
   tags = local.tags
-  availability_zone = "sa-east-1a"
+  availability_zone = "sa-east-1b"
   ami = "ami-0a6db7d09c3037d6c"
   #security_group = ""
-  subnet_id = module.subnet_1a.subnet_id
+  subnet_id = module.subnet_1b.subnet_id
   instance_type = "t2.micro"
   depends_on = [ 
     module.subnet_1b
+   ]
+}
+
+module "ec2-1c" {
+  source = "./modules/ec2"
+  tags = local.tags
+  availability_zone = "sa-east-1c"
+  ami = "ami-0a6db7d09c3037d6c"
+  #security_group = ""
+  subnet_id = module.subnet_1c.subnet_id
+  instance_type = "t2.micro"
+  depends_on = [ 
+    module.subnet_1c
    ]
 }
 
