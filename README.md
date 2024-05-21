@@ -4,4 +4,4 @@
 
 ### Architecture
 
-[](./doc/cloudapp.jpg)
+[img](./doc/cloudapp.jpg)
