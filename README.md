@@ -4,4 +4,4 @@
 
 ### Architecture
 
-![cloud-app-architecture](./doc/cloudapp.jpg)
+![cloud-app-architecture](./doc/cloudapp-arch.jpg)
