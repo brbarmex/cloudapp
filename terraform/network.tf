@@ -1,5 +1,4 @@
 resource "aws_vpc" "vpc" {
-
   cidr_block = "10.0.0.0/16"
   tags = merge(local.tags, {
     Name = "vpc-brbarme"
@@ -36,7 +35,7 @@ resource "aws_subnet" "pvt_subnet_az_1a" {
   map_public_ip_on_launch = false
   tags = merge(local.tags, {
     Name = "pvt-subnet-1a-brbarme"
-  })  
+  })
 }
 
 resource "aws_subnet" "pvt_subnet_az_1b" {
@@ -47,7 +46,7 @@ resource "aws_subnet" "pvt_subnet_az_1b" {
   map_public_ip_on_launch = false
   tags = merge(local.tags, {
     Name = "pvt-subnet-1b-brbarme"
-  })  
+  })
 }
 
 resource "aws_route_table" "pub_route_table" {
