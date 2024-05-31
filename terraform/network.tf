@@ -95,7 +95,7 @@ resource "aws_route_table_association" "pvt_route_table_association_subnet1b" {
   subnet_id      = aws_subnet.pvt_subnet_az_1b.id
 }
 
-resource "aws_security_group" "allow_ssh" {
+resource "aws_security_group" "web_sg" {
   vpc_id = aws_vpc.vpc.id
 
   ingress {
@@ -103,6 +103,20 @@ resource "aws_security_group" "allow_ssh" {
     to_port     = 22
     protocol    = "tcp"
     cidr_blocks = ["${local.my_ip}/32"]
+  }
+
+  ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["${local.my_ip}/32"]
+  }  
+
+  ingress {
+    from_port   = -1
+    to_port     = -1
+    protocol    = "icmp"
+    cidr_blocks = ["10.0.0.0/16"]
   }
 
   egress {
@@ -114,5 +128,27 @@ resource "aws_security_group" "allow_ssh" {
 
   tags = merge(local.tags, {
     Name = "pub-sg-brbarme"
+  })
+}
+
+resource "aws_security_group" "internal_sg" {
+  vpc_id = aws_vpc.vpc.id
+
+  ingress {
+    from_port   = -1
+    to_port     = -1
+    protocol    = "icmp"
+    cidr_blocks = ["10.0.0.0/16"]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = merge(local.tags, {
+    Name = "pvt-sg-brbarme"
   })
 }
