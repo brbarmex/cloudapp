@@ -1,11 +1,16 @@
 resource "aws_vpc" "vpc" {
-  tags       = local.tags
+
   cidr_block = "10.0.0.0/16"
+  tags = merge(local.tags, {
+    Name = "vpc-brbarme"
+  })
 }
 
 resource "aws_internet_gateway" "igw" {
   vpc_id = aws_vpc.vpc.id
-  tags   = local.tags
+  tags = merge(local.tags, {
+    Name = "igw-brbarme"
+  })
 
   depends_on = [
     aws_vpc.vpc
@@ -18,6 +23,9 @@ resource "aws_subnet" "pub_subnet_az_1a" {
   availability_zone       = "sa-east-1a"
   depends_on              = [aws_vpc.vpc]
   map_public_ip_on_launch = true
+  tags = merge(local.tags, {
+    Name = "pub-subnet-1a-brbarme"
+  })
 }
 
 resource "aws_subnet" "pvt_subnet_az_1a" {
@@ -26,6 +34,9 @@ resource "aws_subnet" "pvt_subnet_az_1a" {
   availability_zone       = "sa-east-1a"
   depends_on              = [aws_vpc.vpc]
   map_public_ip_on_launch = false
+  tags = merge(local.tags, {
+    Name = "pvt-subnet-1a-brbarme"
+  })  
 }
 
 resource "aws_subnet" "pvt_subnet_az_1b" {
@@ -34,11 +45,16 @@ resource "aws_subnet" "pvt_subnet_az_1b" {
   availability_zone       = "sa-east-1b"
   depends_on              = [aws_vpc.vpc]
   map_public_ip_on_launch = false
+  tags = merge(local.tags, {
+    Name = "pvt-subnet-1b-brbarme"
+  })  
 }
 
 resource "aws_route_table" "pub_route_table" {
   vpc_id = aws_vpc.vpc.id
-  tags   = local.tags
+  tags = merge(local.tags, {
+    Name = "pub-rt-brbarme"
+  })
 
   depends_on = [
     aws_vpc.vpc,
@@ -59,7 +75,9 @@ resource "aws_route" "pub_route" {
 
 resource "aws_route_table" "pvt_route_table" {
   vpc_id = aws_vpc.vpc.id
-  tags   = local.tags
+  tags = merge(local.tags, {
+    Name = "pvt-rt-brbarme"
+  })
 
   depends_on = [
     aws_vpc.vpc,
@@ -95,5 +113,7 @@ resource "aws_security_group" "allow_ssh" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  tags = local.tags
+  tags = merge(local.tags, {
+    Name = "pub-sg-brbarme"
+  })
 }

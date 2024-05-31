@@ -15,7 +15,7 @@ resource "aws_instance" "web" {
     aws_security_group.allow_ssh
   ]
 
-  tags = {
+  tags = merge(local.tags, {
     Name = "web_instance"
-  }
+  })
 }
