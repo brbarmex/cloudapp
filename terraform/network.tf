@@ -37,7 +37,6 @@ resource "aws_subnet" "pvt_subnet_az_1b" {
 }
 
 resource "aws_route_table" "pub_route_table" {
-
   vpc_id = aws_vpc.vpc.id
   tags   = local.tags
 
@@ -77,4 +76,24 @@ resource "aws_route_table_association" "pvt_route_table_association_subnet1a" {
 resource "aws_route_table_association" "pvt_route_table_association_subnet1b" {
   route_table_id = aws_route_table.pvt_route_table.id
   subnet_id      = aws_subnet.pvt_subnet_az_1b.id
+}
+
+resource "aws_security_group" "allow_ssh" {
+  vpc_id = aws_vpc.vpc.id
+
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["${local.my_ip}/32"]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = local.tags
 }
