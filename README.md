@@ -10,3 +10,6 @@ The main objective of this project is to build a cloud app to serve as a templat
 #### Requeriments
 
 1. Install and setup terraform CLI to work with AWS.
+
+
+# DRAFT ...
