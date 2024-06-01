@@ -23,7 +23,7 @@ resource "aws_subnet" "pub_subnet_az_1a" {
   depends_on              = [aws_vpc.vpc]
   map_public_ip_on_launch = true
   tags = merge(local.tags, {
-    Name = "pub-subnet-1a-brbarme"
+    Name = "pub-brbarme1a"
   })
 }
 
@@ -34,25 +34,14 @@ resource "aws_subnet" "pvt_subnet_az_1a" {
   depends_on              = [aws_vpc.vpc]
   map_public_ip_on_launch = false
   tags = merge(local.tags, {
-    Name = "pvt-subnet-1a-brbarme"
-  })
-}
-
-resource "aws_subnet" "pvt_subnet_az_1b" {
-  vpc_id                  = aws_vpc.vpc.id
-  cidr_block              = "10.0.3.0/24"
-  availability_zone       = "sa-east-1b"
-  depends_on              = [aws_vpc.vpc]
-  map_public_ip_on_launch = false
-  tags = merge(local.tags, {
-    Name = "pvt-subnet-1b-brbarme"
+    Name = "pvt-brbarme1a"
   })
 }
 
 resource "aws_route_table" "pub_route_table" {
   vpc_id = aws_vpc.vpc.id
   tags = merge(local.tags, {
-    Name = "pub-rt-brbarme"
+    Name = "pub-brbarme"
   })
 
   depends_on = [
@@ -75,13 +64,12 @@ resource "aws_route" "pub_route" {
 resource "aws_route_table" "pvt_route_table" {
   vpc_id = aws_vpc.vpc.id
   tags = merge(local.tags, {
-    Name = "pvt-rt-brbarme"
+    Name = "pvt-brbarme"
   })
 
   depends_on = [
     aws_vpc.vpc,
     aws_subnet.pvt_subnet_az_1a,
-    aws_subnet.pvt_subnet_az_1b,
   ]
 }
 
@@ -90,12 +78,7 @@ resource "aws_route_table_association" "pvt_route_table_association_subnet1a" {
   subnet_id      = aws_subnet.pvt_subnet_az_1a.id
 }
 
-resource "aws_route_table_association" "pvt_route_table_association_subnet1b" {
-  route_table_id = aws_route_table.pvt_route_table.id
-  subnet_id      = aws_subnet.pvt_subnet_az_1b.id
-}
-
-resource "aws_security_group" "web_sg" {
+resource "aws_security_group" "pub-sg-brbarme" {
   vpc_id = aws_vpc.vpc.id
 
   ingress {
@@ -110,7 +93,7 @@ resource "aws_security_group" "web_sg" {
     to_port     = 80
     protocol    = "tcp"
     cidr_blocks = ["${local.my_ip}/32"]
-  }  
+  }
 
   ingress {
     from_port   = -1
@@ -131,7 +114,7 @@ resource "aws_security_group" "web_sg" {
   })
 }
 
-resource "aws_security_group" "internal_sg" {
+resource "aws_security_group" "pvt-sg-brbarme" {
   vpc_id = aws_vpc.vpc.id
 
   ingress {
