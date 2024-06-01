@@ -5,7 +5,7 @@ The main objective of this project is to build a cloud app to serve as a templat
 
 ### Cloud Resource Architecture
 
-![cloud-app-architecture](./doc/cloudapp-arch.jpg)
+![cloud-app-architecture](./doc/cloudapp-arch-v1.0.1.jpg.jpg)
 
 #### Requeriments
 
