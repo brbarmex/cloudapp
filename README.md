@@ -1,4 +1,4 @@
-# cloud-app-sample
+# cloudapp
 
 The main objective of this project is to build a cloud app to serve as a template. This project will provision everything from the infrastructure to deploying the app on AWS
 
